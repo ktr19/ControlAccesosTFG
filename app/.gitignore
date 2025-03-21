@@ -1,0 +1,49 @@
+# 🐍 Entorno virtual
+.venv/
+venv/
+
+
+# 📦 Dependencias y compilaciones
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+*.dist-info/
+pip-wheel-metadata/
+
+
+
+# 🔧 Archivos de configuración y entorno
+.env
+.env.local
+instance/
+config.py
+
+
+# 🗃️ Base de datos SQLite (si la usas para desarrollo)
+*.sqlite3
+*.db
+
+# 🚀 Archivos de despliegue o logs
+*.log
+logs/
+*.pid
+
+# 💾 Archivos de caché o compilados
+*.pyc
+.cache/
+.mypy_cache/
+.tox/
+.coverage
+coverage.xml
+htmlcov/
+
+# 🛠 IDEs y editores
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# 📜 Documentación o datos temporales
+.DS_Store
+Thumbs.db
