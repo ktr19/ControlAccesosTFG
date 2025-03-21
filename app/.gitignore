@@ -1,7 +1,8 @@
 # 🐍 Entorno virtual
 .venv/
 venv/
-
+venv
+.venv
 
 # 📦 Dependencias y compilaciones
 __pycache__/
