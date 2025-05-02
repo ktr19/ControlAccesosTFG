@@ -1,6 +1,7 @@
-from app.extension import db
+from appApi.extension import db
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
+
 
 class Employee(db.Model):
     __tablename__ = "employees"

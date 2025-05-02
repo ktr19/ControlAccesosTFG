@@ -1,5 +1,6 @@
-from app.extension import db
+from appApi.extension import db
 from sqlalchemy.orm import relationship
+from appApi.models.Company import Company
 
 class Office(db.Model):
     __tablename__ = "offices"
@@ -13,7 +14,6 @@ class Office(db.Model):
     creation_date = db.Column(db.DateTime, nullable=False, server_default=db.func.now())
     
 
-    company = relationship('Company', backref='offices', cascade='all, delete-orphan')
-
+    company = relationship("Company", backref="offices") 
     def __repr__(self):
         return f"<Office {self.address}, {self.city}, {self.country}>"
