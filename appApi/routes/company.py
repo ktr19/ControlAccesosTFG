@@ -1,10 +1,12 @@
 from flask import Blueprint, jsonify, request
 from appApi import db  
 from appApi.models.Company import Company
+from appApi.utils.jwt import token_requerido
 
 company_bp = Blueprint('company_bp', __name__)
 
 @company_bp.route("/companies", methods=["GET"])
+@token_requerido
 def get_all_companies():
     companies = Company.query.all()
     result = []
@@ -22,6 +24,7 @@ def get_all_companies():
 
 
 @company_bp.route("/companies", methods=["POST"])
+@token_requerido
 def create_company():
     data = request.json
 
@@ -42,6 +45,7 @@ def create_company():
     }), 201
 
 @company_bp.route("/companies/<int:company_id>", methods=["GET"])
+@token_requerido
 def get_company(company_id):
     company = Company.query.get_or_404(company_id)
 
@@ -54,6 +58,7 @@ def get_company(company_id):
     })
 
 @company_bp.route("/companies/<int:company_id>", methods=["DELETE"])
+@token_requerido
 def delete_company(company_id):
     company = Company.query.get_or_404(company_id)
     db.session.delete(company)
