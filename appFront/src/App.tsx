@@ -1,19 +1,51 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "../components/Login";
-import UserTable from "../components/UserTable";
-import EditEmployee from "../components/EditEmployee"
-import CreateEmployee from "../components/CreateEmployee"
-import "../styles/login.css";
-import "../styles/styles.css";
+import Login from '../pages/Login';
+import CreateEmployee from '../pages/CreateEmployee'
+import UserTable from '../pages/UserTable'
+import EditEmployee from '../pages/EditEmployee'
+
+import LoginLayout from "../layouts/LoginLayout";
+import DashboardLayout from "../layouts/DashboardLayout";
+import ProtectedRoute from "../components/ProtectedRoute";
+
 const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/dashboard" element={<UserTable />} />
-        <Route path="/create" element={<CreateEmployee />} /> {/* 👈 nueva ruta */}
-        <Route path="/edit/:id" element={<EditEmployee />} /> {/* 👈 nueva ruta */}
+        <Route
+          path="/"
+          element={
+              <Login />
+          
+          }
+        />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+              <UserTable />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/create"
+        element={
+          <ProtectedRoute>
+              <CreateEmployee />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/edit/:id"
+        element={
+          <ProtectedRoute>
+              <EditEmployee />
+          </ProtectedRoute>
+        }
+      />
+
       </Routes>
     </Router>
   );

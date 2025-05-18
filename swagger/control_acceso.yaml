@@ -1,0 +1,325 @@
+openapi: 3.0.3
+info:
+  title: Employee API
+  version: 1.0.0
+  description: API para gestión de empleados y compañías
+
+servers:
+  - url: http://localhost:5000
+
+paths:
+  /employees:
+    post:
+      summary: Crear un empleado
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeInput'
+      responses:
+        '201':
+          description: Empleado creado
+        '400':
+          description: El correo ya está registrado
+
+    get:
+      summary: Obtener todos los empleados
+      responses:
+        '200':
+          description: Lista de empleados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EmployeeSummary'
+
+  /employees/{employee_id}:
+    get:
+      summary: Obtener empleado por ID
+      parameters:
+        - in: path
+          name: employee_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Datos del empleado
+    put:
+      summary: Actualizar empleado
+      parameters:
+        - in: path
+          name: employee_id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeUpdate'
+      responses:
+        '200':
+          description: Empleado actualizado
+    delete:
+      summary: Eliminar empleado
+      parameters:
+        - in: path
+          name: employee_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Empleado eliminado
+
+  /employees/{employee_id}/change_password:
+    put:
+      summary: Cambiar contraseña del empleado
+      parameters:
+        - in: path
+          name: employee_id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                new_password:
+                  type: string
+      responses:
+        '200':
+          description: Contraseña cambiada exitosamente
+
+  /employees/{employee_id}/qr:
+    post:
+      summary: Guardar código QR para empleado
+      parameters:
+        - in: path
+          name: employee_id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                qr_code:
+                  type: string
+      responses:
+        '200':
+          description: QR guardado correctamente
+
+  /employees/activate:
+    post:
+      summary: Activar o desactivar empleado por QR
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                qr_code:
+                  type: string
+                employee_id:
+                  type: integer
+                company_id:
+                  type: integer
+      responses:
+        '200':
+          description: Empleado activado o desactivado
+
+  /employees/search:
+    get:
+      summary: Buscar empleados
+      parameters:
+        - in: query
+          name: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Resultados de búsqueda
+
+  /login:
+    post:
+      summary: Login de empleado
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginInput'
+      responses:
+        '200':
+          description: Login exitoso
+
+  /dashboard-login:
+    post:
+      summary: Login de administrador
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginInput'
+      responses:
+        '200':
+          description: Login exitoso
+
+  /companies/{company_id}/employees:
+    get:
+      summary: Obtener empleados por compañía
+      parameters:
+        - in: path
+          name: company_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de empleados por compañía
+
+  /companies:
+    get:
+      summary: Obtener todas las compañías
+      responses:
+        '200':
+          description: Lista de compañías
+    post:
+      summary: Crear una compañía
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyInput'
+      responses:
+        '201':
+          description: Compañía creada
+        '400':
+          description: NIF ya registrado
+
+  /companies/{company_id}:
+    get:
+      summary: Obtener compañía por ID
+      parameters:
+        - in: path
+          name: company_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Datos de la compañía
+    delete:
+      summary: Eliminar compañía
+      parameters:
+        - in: path
+          name: company_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Compañía eliminada
+
+components:
+  schemas:
+    EmployeeInput:
+      type: object
+      required:
+        - first_name
+        - last_name
+        - email
+        - password
+        - company_id
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        company_id:
+          type: integer
+        office_id:
+          type: integer
+        role:
+          type: string
+        entry_date:
+          type: string
+        exit_date:
+          type: string
+
+    EmployeeUpdate:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        role:
+          type: string
+        is_active:
+          type: boolean
+        office_id:
+          type: integer
+        password:
+          type: string
+
+    EmployeeSummary:
+      type: object
+      properties:
+        employee_id:
+          type: integer
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+        is_active:
+          type: boolean
+        company_id:
+          type: integer
+        office_id:
+          type: integer
+
+    LoginInput:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+
+    CompanyInput:
+      type: object
+      required:
+        - name
+        - nif
+      properties:
+        name:
+          type: string
+        acronym:
+          type: string
+        nif:
+          type: string

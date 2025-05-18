@@ -1,0 +1,220 @@
+/* Reset de márgenes y alturas */
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: radial-gradient(circle at center, #1e3a8a 0%, #2563eb 100%);
+  background-attachment: fixed;
+  color: white;
+  overflow-x: hidden;
+}
+
+/* Contenedor principal */
+.main-container {
+  padding: 30px;
+  min-height: 100vh;
+  background-color: #1e293b;
+  box-sizing: border-box;
+}
+
+/* Barra superior */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  background: rgba(0, 0, 0, 0.7); 
+  padding: 12px 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.logout-button {
+  background: #dc2626;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.logout-button:hover {
+  background-color: #b91c1c;
+  transform: scale(1.05);
+}
+
+/* Contenedor de gestión */
+.management-container {
+  margin-top: 24px;
+  background-color: #111827; /* Color más oscuro para contrastar */
+  padding: 24px;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Encabezado de gestión */
+.management-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+/* Botón de creación */
+.create-button {
+  background: #22c55e;
+  padding: 12px 20px;
+  border-radius: 6px;
+  border: none;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.create-button:hover {
+  background-color: #15803d;
+  transform: scale(1.05);
+}
+
+/* Contenedor de selección */
+.select-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.select-dropdown {
+  background-color: #374151;
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: white;
+  border: none;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.select-dropdown:hover {
+  background-color: #4b5563;
+}
+
+/* Estilo de la tabla */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 24px;
+}
+
+.table th,
+.table td {
+  padding: 14px 20px;
+  text-align: left;
+  border-bottom: 1px solid #4b5563;
+}
+
+.table th {
+  background-color: #1f2937;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.row-even {
+  background-color: #2d3748;
+}
+
+.row-odd {
+  background-color: #1e293b;
+}
+
+/* Indicadores de estado */
+.indicator {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.indicator-active {
+  background-color: #22c55e;
+}
+
+.indicator-inactive {
+  background-color: #ef4444;
+}
+
+/* Botones de acción */
+.action-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.modify-button, .delete-button {
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.modify-button {
+  background-color: #22c55e;
+}
+
+.modify-button:hover {
+  background-color: #15803d;
+  transform: scale(1.05);
+}
+
+.delete-button {
+  background-color: #ef4444;
+}
+
+.delete-button:hover {
+  background-color: #b91c1c;
+  transform: scale(1.05);
+}
+
+/* Pie de página */
+.footer {
+  text-align: center;
+  color: #9ca3af;
+  margin-top: 36px;
+  padding: 24px;
+  background-color: #111827;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.pagination-controls {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  font-size: 14px;
+  color: #e5e7eb;
+}
+
+.pagination-button {
+  background-color: #2563eb;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.pagination-button:disabled {
+  background-color: #3b82f6;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-button:hover:not(:disabled) {
+  background-color: #1e40af;
+}
