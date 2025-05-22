@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/general.css";
+
 
 interface Props {
   userName: string;

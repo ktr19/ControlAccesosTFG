@@ -7,12 +7,11 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useNavigate } from "react-router-dom";
-import "../styles/general.css"; // Asegúrate de tener este archivo en tu estructura de proyecto
+
 
 interface Employee {
   employee_id: number;
   company_id: number;
-  office_id: number | null;
   first_name: string;
   last_name: string;
   email: string;
@@ -29,7 +28,6 @@ interface Employee {
 type ColumnId =
   | "employee_id"
   | "company_id"
-  | "office_id"
   | "first_name"
   | "last_name"
   | "email"
@@ -45,7 +43,7 @@ type ColumnId =
 
 interface Props {
   employeeData: Employee[];
-  visibleColumns: ColumnId[];
+  visibleColumns: string[];
   pageSize: number;
   pageIndex: number;
   setPageSize: (size: number) => void;
@@ -73,10 +71,6 @@ const EmployeeTable: React.FC<Props> = ({
     company_id: columnHelper.accessor("company_id", {
       header: "Company ID",
       cell: (info) => info.getValue(),
-    }),
-    office_id: columnHelper.accessor("office_id", {
-      header: "Office ID",
-      cell: (info) => info.getValue() ?? "-",
     }),
     first_name: columnHelper.accessor("first_name", {
       header: "Nombre",
@@ -149,7 +143,14 @@ const EmployeeTable: React.FC<Props> = ({
     }),
   };
 
-  const columns = visibleColumns.map((colId) => allColumns[colId]).filter(Boolean);
+const columns = [
+  ...visibleColumns
+    .filter((colId) => colId !== "actions")
+    .map((colId) => allColumns[colId])
+    .filter(Boolean),
+  ...(visibleColumns.includes("actions") ? [allColumns.actions] : []),
+];
+
 
   const table = useReactTable({
     data: employeeData,

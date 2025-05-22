@@ -11,7 +11,6 @@ const EditEmployee: React.FC = () => {
     first_name: "",
     last_name: "",
     is_active: true,
-    office_id: null,
     role: "employee",
   });
 
@@ -28,7 +27,6 @@ const EditEmployee: React.FC = () => {
           first_name: employee.first_name,
           last_name: employee.last_name,
           is_active: employee.is_active,
-          office_id: employee.office_id,
           role: employee.role,
         });
       })

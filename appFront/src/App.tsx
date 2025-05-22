@@ -5,8 +5,6 @@ import CreateEmployee from '../pages/CreateEmployee'
 import UserTable from '../pages/UserTable'
 import EditEmployee from '../pages/EditEmployee'
 
-import LoginLayout from "../layouts/LoginLayout";
-import DashboardLayout from "../layouts/DashboardLayout";
 import ProtectedRoute from "../components/ProtectedRoute";
 
 const App: React.FC = () => {

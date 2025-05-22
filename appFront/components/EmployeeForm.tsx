@@ -8,7 +8,6 @@ interface EmployeeFormProps {
     email: string;
     password: string;
     role: string;
-    office_id: string;
 
   };
   error: string;
@@ -39,6 +38,8 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({
             value={formData.first_name}
             onChange={onChange}
             className="input-field"
+            maxLength={50}
+            minLength={1}
           />
         </div>
         <div>
@@ -51,6 +52,8 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({
             value={formData.last_name}
             onChange={onChange}
             className="input-field"
+            maxLength={50}
+            minLength={1}
           />
         </div>
       </div>
@@ -75,6 +78,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({
         value={formData.password}
         onChange={onChange}
         className="input-field"
+        minLength={8}
       />
 
       <div className="form-grid">
@@ -89,16 +93,6 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({
             <option value="employee">Empleado</option>
             <option value="admin">Administrador</option>
           </select>
-        </div>
-        <div>
-          <label>ID Oficina (opcional)</label>
-          <input
-            type="text"
-            name="office_id"
-            value={formData.office_id}
-            onChange={onChange}
-            className="input-field"
-          />
         </div>
       </div>
 

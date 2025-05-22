@@ -7,11 +7,10 @@ import SearchBar from "../components/SearchBar";
 import ColumnSelector from "../components/ColumnsSelector";
 import EmployeeTable from "../components/EmployeeTable";
 import PaginationControls from "../components/PaginationControls";
-
+import "../styles/general.css";
 interface Employee {
   employee_id: number;
   company_id: number;
-  office_id: number | null;
   first_name: string;
   last_name: string;
   email: string;
@@ -32,16 +31,14 @@ const UserTable: React.FC = () => {
   const [pageSize, setPageSize] = useState<number>(10);
   const [pageIndex, setPageIndex] = useState(0);
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [filter, setFilter] = useState<string>(""); // <-- Nuevo estado para filtro
   const [error, setError] = useState<string>("");
 
   const token = localStorage.getItem("token");
 
-  // Definición de columnas que se usarán en EmployeeTable y ColumnSelector
-  // (esto debe estar aquí para compartir entre ambos componentes)
   const allColumns = [
     "employee_id",
     "company_id",
-    "office_id",
     "first_name",
     "last_name",
     "email",
@@ -56,7 +53,6 @@ const UserTable: React.FC = () => {
     "actions",
   ];
 
-  // Estado para columnas visibles, por defecto algunas
   const [visibleColumns, setVisibleColumns] = useState<string[]>([
     "employee_id",
     "first_name",
@@ -66,7 +62,7 @@ const UserTable: React.FC = () => {
     "actions",
   ]);
 
-  const fetchEmployees = async (query = "") => {
+  const fetchEmployees = async (query = "", filterValue = "") => {
     if (!token) {
       navigate("/");
       return;
@@ -80,8 +76,18 @@ const UserTable: React.FC = () => {
       const user = JSON.parse(storedUser);
       const companyId = user.company_id;
 
+      // Si tu API soporta filtro, pásalo aquí. Sino filtras localmente abajo.
       const data = await fetchEmployeesAPI(token, companyId, query);
-      setEmployeeData(data);
+
+      // Filtrar localmente si hay filtro aplicado
+      let filteredData = data;
+      if (filterValue === "activo") {
+        filteredData = data.filter(emp => emp.is_active === true);
+      } else if (filterValue === "inactivo") {
+        filteredData = data.filter(emp => emp.is_active === false);
+      }
+
+      setEmployeeData(filteredData);
       setError("");
       setPageIndex(0);
     } catch (err: any) {
@@ -113,8 +119,14 @@ const UserTable: React.FC = () => {
     }
   }, [navigate, token]);
 
+  // Cuando cambian searchQuery o filter, lanza la búsqueda
+  useEffect(() => {
+    fetchEmployees(searchQuery, filter);
+  }, [searchQuery, filter]);
+
   const handleLogOut = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
     navigate("/");
   };
 
@@ -128,14 +140,16 @@ const UserTable: React.FC = () => {
     setVisibleColumns((prev) => prev.filter((col) => col !== columnId));
   };
 
-return (
+  return (
     <div className="main-container">
       <UserTableHeader userName={userName} onLogOut={handleLogOut} />
       <div className="management-container">
         <SearchBar
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
-          onSearch={() => fetchEmployees(searchQuery)}
+          onSearch={() => fetchEmployees(searchQuery, filter)}
+          filter={filter}
+          setFilter={setFilter}
         />
 
         {error && <div style={{ color: "red", marginBottom: "1rem" }}>{error}</div>}
@@ -147,7 +161,6 @@ return (
           onRemoveColumn={handleRemoveColumn}
         />
 
-        {/* Botón de crear usuario */}
         <div style={{ margin: "1rem 0" }}>
           <button onClick={() => navigate("/create")} className="create-button">
             Crear Usuario
@@ -161,6 +174,7 @@ return (
           onPageChange={setPageIndex}
           onPageSizeChange={setPageSize}
         />
+
         <EmployeeTable
           employeeData={employeeData}
           visibleColumns={visibleColumns}
@@ -170,8 +184,6 @@ return (
           setPageIndex={setPageIndex}
           onDelete={handleDelete}
         />
-
-
       </div>
 
       <footer className="footer">

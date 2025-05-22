@@ -12,7 +12,6 @@ const CreateEmployee: React.FC = () => {
     email: "",
     password: "",
     role: "employee",
-    office_id: "",
 
   });
 
@@ -60,8 +59,6 @@ const CreateEmployee: React.FC = () => {
     const body = {
       ...formData,
       company_id: user.company_id,
-      office_id: formData.office_id || null,
-
     };
 
     try {

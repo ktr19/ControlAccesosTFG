@@ -1,5 +1,5 @@
-import React from "react";
-import "../styles/general.css";
+import React, { useState } from "react";
+
 
 interface Props {
   allColumns: string[];
@@ -14,12 +14,11 @@ const ColumnSelector: React.FC<Props> = ({
   onAddColumn,
   onRemoveColumn,
 }) => {
-  const hiddenColumns = allColumns.filter((col) => !visibleColumns.includes(col));
+  const [open, setOpen] = useState(false);
 
   const columnLabels: Record<string, string> = {
     employee_id: "ID",
     company_id: "Company ID",
-    office_id: "Office ID",
     first_name: "Nombre",
     last_name: "Apellido",
     email: "Email",
@@ -34,51 +33,35 @@ const ColumnSelector: React.FC<Props> = ({
     actions: "Acciones",
   };
 
-  return (
-    <div className="column-selector">
-      <label htmlFor="add-column-select" className="column-selector-label">
-        Añadir columna:
-      </label>
-      <select
-        id="add-column-select"
-        onChange={(e) => {
-          if (e.target.value) {
-            onAddColumn(e.target.value);
-            e.target.value = "";
-          }
-        }}
-        defaultValue=""
-        className="column-selector-select"
-      >
-        <option value="" disabled>
-          Selecciona una columna
-        </option>
-        {hiddenColumns.map((col) => (
-          <option key={col} value={col}>
-            {columnLabels[col] || col}
-          </option>
-        ))}
-      </select>
+  const handleToggle = (colId: string) => {
+    if (colId === "actions") return; // Evitar quitar "actions"
+    if (visibleColumns.includes(colId)) {
+      onRemoveColumn(colId);
+    } else {
+      onAddColumn(colId);
+    }
+  };
 
-      <div className="visible-columns">
-        <strong>Columnas visibles:</strong>
-        {visibleColumns.map((col) => (
-          <span
-            key={col}
-            className={`visible-column ${
-              col === "actions" ? "non-removable" : "removable"
-            }`}
-            onClick={() => col !== "actions" && onRemoveColumn(col)}
-            title={
-              col === "actions"
-                ? "No se puede eliminar esta columna"
-                : "Haz clic para ocultar"
-            }
-          >
-            {columnLabels[col] || col}
-          </span>
-        ))}
-      </div>
+  return (
+    <div className="column-selector-dropdown">
+      <button className="dropdown-toggle" onClick={() => setOpen(!open)}>
+        Seleccionar columnas ⬇️
+      </button>
+      {open && (
+        <div className="dropdown-menu">
+          {allColumns.map((colId) => (
+            <label key={colId} className="dropdown-item">
+              <input
+                type="checkbox"
+                checked={visibleColumns.includes(colId)}
+                disabled={colId === "actions"}
+                onChange={() => handleToggle(colId)}
+              />
+              {columnLabels[colId] || colId}
+            </label>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

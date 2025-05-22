@@ -7,7 +7,7 @@ interface EmployeeEditFormProps {
     last_name: string;
     role: string;
     is_active: boolean;
-    office_id: number | null;
+    password?: string;  // agregado password opcional
   };
   onChange: (e: React.ChangeEvent<any>) => void;
   onSubmit: (e: React.FormEvent) => void;
@@ -49,6 +49,18 @@ const EmployeeEditForm: React.FC<EmployeeEditFormProps> = ({
         <option value="employee">Empleado</option>
         <option value="admin">Administrador</option>
       </select>
+
+      {/* Nuevo campo contraseña opcional */}
+      <input
+        type="password"
+        name="password"
+        placeholder="Contraseña (dejar vacío para no cambiar)"
+        value={formData.password || ""}
+        onChange={onChange}
+        className="input-field"
+        minLength={8}
+      />
+
       <label>
         Activo:
         <input
@@ -59,6 +71,7 @@ const EmployeeEditForm: React.FC<EmployeeEditFormProps> = ({
           className="input-field"
         />
       </label>
+
       <div className="button-group">
         <button type="submit" className="primary-button">
           Guardar Cambios
