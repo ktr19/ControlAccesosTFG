@@ -1,0 +1,57 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
+    android:padding="24dp">
+
+    <ImageView
+        android:id="@+id/qr_image"
+        android:layout_width="260dp"
+        android:layout_height="260dp"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="60dp"
+        android:background="@drawable/qr_background"
+        android:elevation="10dp"
+        android:padding="20dp" />
+    <ProgressBar
+        android:id="@+id/countdown_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/qr_image"
+        android:layout_marginTop="24dp"
+        android:layout_centerHorizontal="true"
+        android:progressDrawable="@drawable/progress_bar"
+        android:max="100"
+        android:progress="100"/>
+
+    <Button
+        android:id="@+id/go_to_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ir al Perfil"
+        android:textAllCaps="false"
+        android:background="@drawable/button_rounded"
+        android:textColor="@android:color/white"
+        android:layout_below="@id/countdown_progress"
+        android:layout_marginTop="40dp"
+        android:layout_centerHorizontal="true"
+        android:padding="16dp"
+        android:elevation="6dp" />
+
+    <Button
+        android:id="@+id/logout_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cerrar sesión"
+        android:textAllCaps="false"
+        android:background="@drawable/button_rounded"
+        android:textColor="@android:color/white"
+        android:layout_below="@id/go_to_profile"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:padding="16dp"
+        android:elevation="6dp" />
+
+
+</RelativeLayout>

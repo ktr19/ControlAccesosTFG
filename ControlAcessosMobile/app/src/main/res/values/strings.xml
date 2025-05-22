@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">ControlAcesso</string>
+    <string name="email">Email:</string>
+    <string name="surname">Surname:</string>
+    <string name="name">Name:</string>
+    <string name="role">Role:</string>
+    <string name="office_id">Office ID:</string>
+    <string name="company_id">Company ID:</string>
+    <string name="employee_id">Employee ID:</string>
+    <string name="user_id">USER ID</string>
+    <string name="back">Back</string>
+    <string name="control_de_acceso">Control de Acceso</string>
+    <string name="iniciar_sesi_n">Iniciar sesión</string>
+</resources>

@@ -1,0 +1,31 @@
+<!-- res/drawable/button_rounded.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Estado cuando el botón es presionado -->
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#009ACD"/> <!-- Color más oscuro al presionar -->
+            <stroke android:width="2dp" android:color="#00FFF7"/>
+            <corners android:radius="30dp"/>
+        </shape>
+    </item>
+
+    <!-- Estado cuando el botón está deshabilitado -->
+    <item android:state_enabled="false">
+        <shape android:shape="rectangle">
+            <solid android:color="#AAAAAA"/> <!-- Color gris cuando no está disponible -->
+            <stroke android:width="2dp" android:color="#CCCCCC"/>
+            <corners android:radius="30dp"/>
+        </shape>
+    </item>
+
+    <!-- Estado normal del botón -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#00B4DB"/> <!-- Color base -->
+            <stroke android:width="2dp" android:color="#00FFF7"/>
+            <corners android:radius="30dp"/>
+        </shape>
+    </item>
+
+</selector>
