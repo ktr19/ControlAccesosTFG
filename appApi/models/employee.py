@@ -8,7 +8,6 @@ class Employee(db.Model):
     
     employee_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     company_id = db.Column(db.Integer, db.ForeignKey('companies.company_id'), nullable=False)
-    office_id = db.Column(db.Integer, db.ForeignKey('offices.office_id'), nullable=True)
     first_name = db.Column(db.String(255), nullable=False)
     last_name = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), nullable=False, unique=True)
@@ -24,7 +23,6 @@ class Employee(db.Model):
 
 
     company = relationship('Company', backref='employees')
-    office = relationship('Office', backref='employees', lazy='joined')
 
     def __repr__(self):
         return f"<Employee {self.first_name} {self.last_name}, Role: {self.role}>"

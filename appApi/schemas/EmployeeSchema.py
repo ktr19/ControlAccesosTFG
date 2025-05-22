@@ -12,21 +12,20 @@ class EmployeeSchema(Schema):
 
     employee_id = fields.Integer(dump_only=True)
     company_id = fields.Integer(required=True)
-    office_id = fields.Integer(allow_none=True)
 
     first_name = fields.String(
         required=True,
-        validate=validate.Length(min=1, max=255),
+        validate=validate.Length(min=1, max=50),
         metadata={"description": "Nombre del empleado"}
     )
     last_name = fields.String(
         required=True,
-        validate=validate.Length(min=1, max=255),
+        validate=validate.Length(min=1, max=50),
         metadata={"description": "Apellido del empleado"}
     )
     email = fields.Email(
         required=True,
-        validate=validate.Length(max=255),
+        validate=validate.Length(max=60),
         metadata={"description": "Correo electrónico único"}
     )
     password = fields.String(

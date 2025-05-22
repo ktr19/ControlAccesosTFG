@@ -1,11 +1,13 @@
+from datetime import datetime
 from flask import Blueprint, jsonify, request
 from marshmallow import ValidationError
-from sqlalchemy import String, cast, func
+from sqlalchemy import String, cast, func, or_
 from werkzeug.security import check_password_hash, generate_password_hash
 from appApi import db
 from appApi.models.employee import Employee
 from appApi.utils.jwt import crear_token, token_requerido
 from appApi.schemas.EmployeeSchema import EmployeeSchema
+
 
 employee_bp = Blueprint("employee_bp", __name__)
 employee_schema = EmployeeSchema()
@@ -28,7 +30,6 @@ def create_employee():
 
     employee = Employee(
         company_id=employee_data["company_id"],
-        office_id=employee_data.get("office_id"),
         first_name=employee_data["first_name"],
         last_name=employee_data["last_name"],
         email=employee_data["email"],
@@ -92,7 +93,6 @@ def update_employee(employee_id):
     emp.last_name = employee_data.get("last_name", emp.last_name)
     emp.role = employee_data.get("role", emp.role)
     emp.is_active = employee_data.get("is_active", emp.is_active)
-    emp.office_id = employee_data.get("office_id", emp.office_id)
 
     if "password" in employee_data:
         # Usar generate_password_hash para que sea compatible
@@ -139,34 +139,45 @@ def save_qr_for_employee(employee_id):
     return jsonify({"message": "QR guardado correctamente"}), 200
 
 
+
 @employee_bp.route("/employees/activate", methods=["POST"])
 @token_requerido
 def activate_employee_by_qr():
     data = request.json
     qr_code = data.get("qr_code")
     employee_id = data.get("employee_id")
-    company_id = data.get("company_id")
 
-    if not qr_code or not employee_id or not company_id:
+    if not qr_code or not employee_id:
         return jsonify({"message": "QR code, ID de empleado y compañía son requeridos"}), 400
 
     employee = Employee.query.filter_by(
         qr_code=qr_code,
         employee_id=employee_id,
-        company_id=company_id
     ).first()
 
     if not employee:
         return jsonify({"message": "Datos inválidos o QR no coincide"}), 404
 
+    now = datetime.utcnow()
+
+    if not employee.is_active:
+        # Fichando entrada
+        employee.entry_date = now
+        employee.exit_date = None
+    else:
+        # Fichando salida
+        employee.exit_date = now
+
     employee.is_active = not employee.is_active
     db.session.commit()
 
     return jsonify({
-        "message": f"Empleado {'activado' if employee.is_active else 'desactivado'}",
+        "message": f"Empleado {'fichó entrada' if employee.is_active else 'fichó salida'}",
         "employee_id": employee.employee_id,
         "nombre": employee.first_name,
-        "estado": "activo" if employee.is_active else "inactivo"
+        "estado": "activo" if employee.is_active else "inactivo",
+        "entrada": employee.entry_date.isoformat() if employee.entry_date else None,
+        "salida": employee.exit_date.isoformat() if employee.exit_date else None
     }), 200
 
 
@@ -197,20 +208,37 @@ def get_employee_by_id(employee_id):
     result = employee_schema.dump(employee)
     return jsonify(result), 200
 
-
 @employee_bp.route("/employees/search", methods=["GET"])
 @token_requerido
 def search_employees():
     query = request.args.get("query", "").strip()
+    is_active = request.args.get("is_active")  # Puede ser "true", "false" o None
 
-    if not query:
-        return jsonify({"message": "Debes ingresar un término de búsqueda"}), 400
+    if not query and is_active is None:
+        return jsonify({"message": "Debes ingresar un término de búsqueda o filtro activo"}), 400
 
-    employees = Employee.query.filter(
-        (cast(Employee.employee_id, String).ilike(f"%{query}%")) |
-        (Employee.first_name.ilike(f"%{query}%")) |
-        (Employee.email.ilike(f"%{query}%"))
-    ).all()
+    filters = []
+
+    # Si hay texto para buscar
+    if query:
+        filters.append(
+            or_(
+                cast(Employee.employee_id, String).ilike(f"%{query}%"),
+                Employee.first_name.ilike(f"%{query}%"),
+                Employee.email.ilike(f"%{query}%"),
+            )
+        )
+
+    # Si se especifica filtro activo/inactivo
+    if is_active is not None:
+        if is_active.lower() == "true":
+            filters.append(Employee.is_active.is_(True))
+        elif is_active.lower() == "false":
+            filters.append(Employee.is_active.is_(False))
+        else:
+            return jsonify({"message": "Valor inválido para is_active"}), 400
+
+    employees = Employee.query.filter(*filters).all()
 
     if not employees:
         return jsonify({"message": "No se encontraron empleados con ese criterio"}), 404
